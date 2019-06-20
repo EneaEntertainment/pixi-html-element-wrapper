@@ -4,7 +4,7 @@ import bounds from './bounds.js';
  *
  * ElementWrapper
  *
- * @version : 2.0.0
+ * @version : 2.0.1
  * @author  : http://www.enea.sk
  *
  * @export
@@ -21,6 +21,9 @@ export default class ElementWrapper extends PIXI.DisplayObject
     constructor(target = null)
     {
         super();
+
+        // prevents AccessibilityManager crash
+        this.children = [];
 
         this.target = target;
 
