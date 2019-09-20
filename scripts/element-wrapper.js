@@ -1,10 +1,10 @@
-import bounds from './bounds.js';
+import canvasBounds from './canvas-bounds.js';
 
 /**
  *
  * ElementWrapper
  *
- * @version : 2.0.1
+ * @version : 2.0.2
  * @author  : http://www.enea.sk
  *
  * @export
@@ -26,31 +26,10 @@ export default class ElementWrapper extends PIXI.DisplayObject
         this.children = [];
 
         this.target = target;
-
-        this.previousTransform = new PIXI.Matrix();
+        this.prevID = -1;
 
         this._anchorX = 0;
         this._anchorY = 0;
-    }
-
-    /**
-     *
-     * compareMatrices
-     *
-     * @param {PIXI.Matrix} matrix1
-     * @param {PIXI.Matrix} matrix2
-     * @returns {boolean}
-     */
-    compareMatrices(matrix1, matrix2)
-    {
-        return (
-            matrix1.a === matrix2.a &&
-            matrix1.b === matrix2.b &&
-            matrix1.c === matrix2.c &&
-            matrix1.d === matrix2.d &&
-            matrix1.tx === matrix2.tx &&
-            matrix1.ty === matrix2.ty
-        );
     }
 
     /**
@@ -62,8 +41,8 @@ export default class ElementWrapper extends PIXI.DisplayObject
     {
         const matrix = this.worldTransform;
 
-        this.target.style.left = `${bounds.x}px`;
-        this.target.style.top = `${bounds.y}px`;
+        this.target.style.left = `${canvasBounds.x}px`;
+        this.target.style.top = `${canvasBounds.y}px`;
         this.target.style.transform = `matrix(${matrix.a}, ${matrix.b}, ${matrix.c}, ${matrix.d}, ${matrix.tx}, ${matrix.ty})`;
     }
 
@@ -74,14 +53,14 @@ export default class ElementWrapper extends PIXI.DisplayObject
      */
     render()
     {
-        if (this.compareMatrices(this.worldTransform, this.previousTransform) || this.target === null)
+        if (this.prevID === this.transform._worldID || this.target === null)
         {
             return;
         }
 
         this.updateTarget();
 
-        this.previousTransform = this.worldTransform.clone();
+        this.prevID = this.transform._worldID;
     }
 
     /**
@@ -92,8 +71,7 @@ export default class ElementWrapper extends PIXI.DisplayObject
     destroy()
     {
         this.target = null;
-
-        this.previousTransform = null;
+        this.prevID = null;
 
         super.destroy();
     }

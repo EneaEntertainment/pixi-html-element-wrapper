@@ -1,4 +1,4 @@
-import bounds from './bounds.js';
+import canvasBounds from './canvas-bounds.js';
 import ElementWrapper from './element-wrapper.js';
 
 let bunny;
@@ -12,7 +12,7 @@ const app = new PIXI.Application({
     backgroundColor : 0x3a7ccd
 });
 
-const canvasHolder = document.getElementById('pixiCanvas');
+const canvasHolder = document.getElementById('pixi-canvas');
 
 canvasHolder.appendChild(app.view);
 
@@ -77,15 +77,15 @@ function onResize()
     // store canvas bounds
     const rect = app.view.getBoundingClientRect();
 
-    bounds.x = rect.left + (window.scrollX || window.pageXOffset);
-    bounds.y = rect.top + (window.scrollY || window.pageYOffset);
-    bounds.width = rect.width;
-    bounds.height = rect.height;
+    canvasBounds.x = rect.left + (window.scrollX || window.pageXOffset);
+    canvasBounds.y = rect.top + (window.scrollY || window.pageYOffset);
+    canvasBounds.width = rect.width;
+    canvasBounds.height = rect.height;
 
     // reposition bunny & wrapped element
-    bunny.x = bounds.width >> 1;
-    bunny.y = (bounds.height >> 1) - (wrappedElement.bounds.height >> 1) - 20;
+    bunny.x = canvasBounds.width >> 1;
+    bunny.y = (canvasBounds.height >> 1) - (wrappedElement.bounds.height >> 1) - 20;
 
-    wrappedElement.x = bounds.width >> 1;
-    wrappedElement.y = (bounds.height >> 1) + 20;
+    wrappedElement.x = canvasBounds.width >> 1;
+    wrappedElement.y = (canvasBounds.height >> 1) + 20;
 }
